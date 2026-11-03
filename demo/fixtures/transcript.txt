@@ -1,0 +1,5 @@
+Dana (PO): For the Sentiment Alerts epic, supervisors need an alert when call sentiment drops below 30% within 60 seconds.
+Lee (Eng): We can use the existing streaming API. Latency target is under 5 seconds.
+Dana: Alerts must be configurable per team. Out of scope for now: email notifications.
+Lee: Dependency on the platform team for API access, not confirmed yet.
+Dana: Success means supervisors act on 80% of alerts. Nobody owns the baseline measurement yet.

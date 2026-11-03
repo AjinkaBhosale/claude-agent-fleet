@@ -8,34 +8,29 @@ A set of Claude Code **sub-agents** and **skills** I designed and ran day to day
 Manual grooming and test-failure triage were slow and inconsistent. The goal: repeatable, auditable agent workflows with human confirmation at every write to a shared system.
 
 ## Architecture
-```
-Transcript + Epic key
-   │
-   ▼
-Requirements-Intelligence-Agent ──► epic quality gate (skill, blocking)
-   │  gap score 0–100, stories + AC (preview → confirm → create)
-   ▼
-Epic-Gap-Resolver-Agent ──► fixes epic text, notifies owners, re-scores
-   │
-   ▼
-jira-test-plan-and-case-generator ──► Confluence test plan + BDD Jira/XRay tests
-   │
-   ▼
-playwright-test-orchestrator ──► health check → run → analyse → diagnose
-   │                                   └─ test-failure-analyzer (infra fix vs real bug)
-   ▼
-bug-filing-agent ──► linked, evidence-backed Jira bug
+See [docs/architecture.md](docs/architecture.md) for the full Mermaid diagram.
 
-Cross-cutting skills: jira-defaults (config in one place), jira-expert, adf-formatter,
-run-logger, epic-readiness-gate-conventions
-Fleet governance: Fleet-Health-Auditor-Agent, Fleet-Evaluator-Agent
 ```
+Transcript + Epic -> Requirements-Intelligence-Agent -> quality gate (blocking)
+   -> Epic-Gap-Resolver-Agent (if blocked) -> stories + AC (preview, confirm, create)
+   -> test plan + BDD tests -> Playwright run + triage -> linked bug (after confirmation)
+```
+
+## Try it in two minutes (no keys needed)
+```
+python3 demo/run_demo.py                                  # weak epic: BLOCKED, with gaps
+python3 demo/run_demo.py demo/fixtures/epic_good.json     # strong epic: READY
+python3 tools/lint_fleet.py && python3 -m pytest -q tests # fleet lint + tests
+```
+The demo is a deterministic stand-in for the gate's rubric, so the behaviour can be shown and tested offline; the real agents apply the same idea with an LLM.
 
 ## What is in the repo
 | Path | Contents |
 |---|---|
 | `agents/` | 16 agents: requirements, test planning, Playwright, bug filing/investigation, API testing, fleet audit |
 | `skills/` | 15 reusable skills: Jira conventions, ADF formatting, epic gates, story decomposition, logging, Playwright rules |
+| `demo/`, `tests/`, `tools/` | Offline demo, tests, and a fleet linter (CI runs them) |
+| `docs/` | Architecture diagram, decisions and trade-offs, safety notes, quickstart |
 
 ## Design decisions worth discussing
 1. **Single source of config.** Cloud IDs, field IDs and parent pages live in one skill (`jira-defaults`); agents reference it and never hardcode.

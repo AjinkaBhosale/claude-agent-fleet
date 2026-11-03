@@ -1,0 +1,3 @@
+{"key":"PROJ-101","title":"Sentiment Alerts","description":"Add alerts for low sentiment.",
+ "acceptance_criteria":["Alerts work well","Users are happy"],
+ "scope_out":[],"dependencies":[],"success_metrics":[],"owner":null}

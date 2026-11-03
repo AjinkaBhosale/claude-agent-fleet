@@ -1,0 +1,4 @@
+{"key":"PROJ-102","title":"Sentiment Alerts","description":"Alert supervisors when call sentiment drops below 30% within 60 seconds, configurable per team.",
+ "acceptance_criteria":["Alert is raised within 5 seconds of sentiment below 30%","Supervisor can set the threshold per team (10-90%)","Alert is not raised for calls shorter than 20 seconds"],
+ "scope_out":["Email notifications"],"dependencies":["Platform team: streaming API access"],
+ "success_metrics":["80% of alerts acted on within 2 minutes (baseline measured in sprint 1)"],"owner":"dana"}
